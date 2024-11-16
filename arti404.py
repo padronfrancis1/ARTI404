@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import yfinance as yf
-from newspaper import Article
-import matplotlib.pyplot as plt
 import plotly.graph_objs as go
+
+# Please make sure to install the following for yahoo news
+# pip install lxml_html_clean
+# pip install lxml[html_clean]
 
 tickers = {
     "NVIDIA (NVDA)": "NVDA",
@@ -39,16 +39,10 @@ for row in rows[1:]:
 
 df = pd.DataFrame(data, columns=headers)
 df.rename(columns={'Close    Close price adjusted for splits.': 'Close'}, inplace=True)
-
 df['Date'] = pd.to_datetime(df['Date'], format='%b %d, %Y')
 df['Close'] = df['Close'].astype(float)
 
 # Historical Data
-st.markdown('<div style="width: 80%;overflow-y: scroll;overflow-x: scroll;">', unsafe_allow_html=True)
-
-# Streamlit line Chart
-# st.line_chart(data=df, x='Date',y='Close')
-
 fig = go.Figure(
     data=[
         go.Candlestick(
@@ -70,20 +64,20 @@ fig.update_layout(
     width=1500,
     height=800
 )
-
 st.plotly_chart(fig, use_container_width=True)
-st.markdown('</div>', unsafe_allow_html=True)
 
-# News
+st.markdown(f"Streamlit line chart")
+st.line_chart(data=df, x='Date',y='Close')
+
+############ News ############
 st.title(f"Recent News for {target_stock}")
 stock = yf.Ticker(target_stock)
 news = stock.news
 if news:
-    st.markdown('<div style="width: 40%;overflow-y: scroll;overflow-x: scroll;">', unsafe_allow_html=True)
     for article in news:
-        st.subheader(article['title'])
+        st.markdown(f"#### [{article['title']}]({article['link']})")
         st.write(f"Source: {article['publisher']}")
-        st.write(f"[Read more]({article['link']})")
-    st.markdown("</div>", unsafe_allow_html=True)
+
+
 else:
     st.write("No recent news available.")
