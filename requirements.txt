@@ -2,10 +2,7 @@ streamlit
 beautifulsoup4
 requests
 lxml
-webdriver
 pandas
 selenium
-lxml_html_clean
-lxml[html_clean]
 yfinance
 plotly
