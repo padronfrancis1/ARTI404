@@ -64,9 +64,10 @@ try:
     stock = yf.Ticker(target_stock)
     news = stock.news
     if news:
-        for article in news:
-            st.markdown(f"#### [{article['title']}]({article['link']})")
-            st.write(f"Source: {article['publisher']}")
+        print(news)
+        # for article in news:
+        #     st.markdown(f"#### [{article['title']}]({article['link']})")
+        #     st.write(f"Source: {article['publisher']}")
     else:
         st.write("No recent news available.")
 except Exception as e:
