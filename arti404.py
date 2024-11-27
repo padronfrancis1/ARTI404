@@ -21,7 +21,15 @@ st.write("Fetching historical stock data...")
 try:
     stock_data = yf.Ticker(target_stock)
     hist_data = stock_data.history(period="6mo")  # Fetch the last 6 months of data
-    
+    news = stock_data.news
+    if news:
+        print(news)
+        # for article in news:
+        #     st.markdown(f"#### [{article['title']}]({article['link']})")
+        #     st.write(f"Source: {article['publisher']}")
+    else:
+        st.write("No recent news available.")
+        
     if hist_data.empty:
         st.error("No historical data found for the selected stock.")
     else:
