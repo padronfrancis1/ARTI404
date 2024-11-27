@@ -24,9 +24,9 @@ try:
     news = stock_data.news
     if news:
         print(news)
-        # for article in news:
-        #     st.markdown(f"#### [{article['title']}]({article['link']})")
-        #     st.write(f"Source: {article['publisher']}")
+        for article in news:
+            st.markdown(f"#### [{article['title']}]({article['link']})")
+            st.write(f"Source: {article['publisher']}")
     else:
         st.write("No recent news available.")
 
