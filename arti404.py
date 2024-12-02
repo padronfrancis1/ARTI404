@@ -28,6 +28,13 @@ try:
 
     news = stock_data.news
 
+    if news:
+    for article in news:
+        st.markdown(f"#### [{article['title']}]({article['link']})")
+        st.text(f"Source: {article['publisher']}")
+    else:
+        st.write("No recent news available.")
+
     if hist_data.empty:
         st.error(f"No historical data found for {target_stock}")
     else:
@@ -72,13 +79,6 @@ try:
         ax.grid(visible=True, linestyle='--', alpha=0.5)
         # Display the plot in Streamlit
         st.pyplot(fig)
-
-    if news:
-        for article in news:
-            st.markdown(f"#### [{article['title']}]({article['link']})")
-            st.text(f"Source: {article['publisher']}")
-    else:
-        st.write("No recent news available.")
 
 except Exception as e:
     st.error(f"An error occurred while fetching the data: {str(e)}")
