@@ -78,7 +78,7 @@ try:
         if news_list:
             st.subheader(f"Recent News for {selected_stock}")
             for news in news_list:
-                st.markdown(f"#### [{news['title']}]({news['link']})")
+                st.text(f"#### [{news['title']}]({news['link']})")
                 st.text(f"Published: {news['date']}")
         else:
             st.write("No recent news available.")
