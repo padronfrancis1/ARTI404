@@ -6,6 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import seaborn as sns
 import matplotlib.pyplot as plt
+from GoogleNews import GoogleNews
 
 regressor = LinearRegression()
 
@@ -26,15 +27,6 @@ try:
     stock_data = yf.Ticker(target_stock)
     hist_data = stock_data.history(period="6mo")
 
-    news = stock_data.news
-
-    if news:
-        for article in news:
-            st.markdown(f"#### [{article['title']}]({article['link']})")
-            st.text(f"Source: {article['publisher']}")
-        else:
-            st.write("No recent news available.")
-
     if hist_data.empty:
         st.error(f"No historical data found for {target_stock}")
     else:
@@ -43,7 +35,7 @@ try:
         hist_data['Days'] = (hist_data['Date'] - hist_data['Date'].min()).dt.days
 
         X = hist_data[['Days']]
-        y = hist_data['Close']   # Target: Closing prices
+        y = hist_data['Close']
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         regressor.fit(X_train, y_train)
@@ -63,7 +55,6 @@ try:
             'Predicted Price': predictions
         })
 
-        # Plotting
         sns.set(style="whitegrid")
         fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -79,6 +70,18 @@ try:
         ax.grid(visible=True, linestyle='--', alpha=0.5)
         # Display the plot in Streamlit
         st.pyplot(fig)
+
+        googlenews = GoogleNews(period='7d')
+        googlenews.search(selected_stock)
+        news_list = googlenews.results()
+
+        if news_list:
+            st.subheader(f"Recent News for {selected_stock}")
+            for news in news_list:
+                st.markdown(f"#### [{news['title']}]({news['link']})")
+                st.text(f"Published: {news['date']}")
+        else:
+            st.write("No recent news available.")
 
 except Exception as e:
     st.error(f"An error occurred while fetching the data: {str(e)}")
