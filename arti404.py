@@ -29,11 +29,11 @@ try:
     news = stock_data.news
 
     if news:
-    for article in news:
-        st.markdown(f"#### [{article['title']}]({article['link']})")
-        st.text(f"Source: {article['publisher']}")
-    else:
-        st.write("No recent news available.")
+        for article in news:
+            st.markdown(f"#### [{article['title']}]({article['link']})")
+            st.text(f"Source: {article['publisher']}")
+        else:
+            st.write("No recent news available.")
 
     if hist_data.empty:
         st.error(f"No historical data found for {target_stock}")
